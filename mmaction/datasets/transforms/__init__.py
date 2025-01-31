@@ -19,6 +19,8 @@ from .processing import (CenterCrop, ColorJitter, Flip, Fuse, MultiScaleCrop,
                          TenCrop, ThreeCrop)
 from .text_transforms import CLIPTokenize
 from .wrappers import ImgAug, PytorchVideoWrapper, TorchVisionWrapper
+from .embedding_heatmap import GeneratePoseTargetWithEmbeddings
+from .flip_attach import FlipAttach
 
 __all__ = [
     'ArrayDecode', 'AudioFeatureSelector', 'BuildPseudoClip', 'CenterCrop',
@@ -37,5 +39,5 @@ __all__ = [
     'SampleAVAFrames', 'SampleFrames', 'TenCrop', 'ThreeCrop', 'ToMotion',
     'TorchVisionWrapper', 'Transpose', 'UniformSample', 'UniformSampleFrames',
     'UntrimmedSampleFrames', 'MMUniformSampleFrames', 'MMDecode', 'MMCompact',
-    'CLIPTokenize'
+    'CLIPTokenize', 'GeneratePoseTargetWithEmbeddings', 'FlipAttach'
 ]
