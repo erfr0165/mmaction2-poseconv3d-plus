@@ -38,9 +38,13 @@ def mean_class_accuracy(scores, labels):
     labels1, labels2, scores1, scores2 = [], [], [], []
 
     # seperate data
+    # IKEA ASM dataset has less classes -> size of scores must be same 
+    # -> IKEA samples have zeros appended to scores -> find IKEA samples by counting the zeros
+    # TODO: implement bettwer way for seperating labels and scores of the datasets
+    # meta keys could be one option
     for label, score in zip(labels, scores):
         zero_count = np.sum(score == 0)
-        if zero_count >= 3:
+        if zero_count >= 2:
             labels1.append(label)
             scores1.append(score)
         else:
@@ -48,22 +52,7 @@ def mean_class_accuracy(scores, labels):
             scores2.append(score)
     
     mean_class_acc1 = mean_class_acc2 = 0
-    # for labels, scores, mean_class_acc_var in [(labels1, scores1, 'mean_class_acc1'), (labels2, scores2, 'mean_class_acc2')]:
-    #     if len(labels) > 0:
-    #         pred = np.argmax(scores, axis=1)
-    #         cf_mat = confusion_matrix(pred, labels).astype(float)
 
-    #         cls_cnt = cf_mat.sum(axis=1)
-    #         cls_hit = np.diag(cf_mat)
-
-    #         mean_class_acc = np.mean([hit / cnt if cnt else 0.0 for cnt, hit in zip(cls_cnt, cls_hit)])
-    #         accs = [hit / cnt for cnt, hit in zip(cls_cnt, cls_hit)]  # Compute accuracies
-
-    #         # Assign mean_class_acc to the appropriate variable
-    #         if mean_class_acc_var == 'mean_class_acc1':
-    #             mean_class_acc1 = mean_class_acc
-    #         else:
-    #             mean_class_acc2 = mean_class_acc
     # dataset 1
     if len(labels1) > 0:
         pred1 = np.argmax(scores1, axis=1)
@@ -117,7 +106,7 @@ def top_k_accuracy(scores, labels, topk=(1, )):
     # seperate data
     for label, score in zip(labels, scores):
         zero_count = np.sum(score == 0)
-        if zero_count >= 3:
+        if zero_count >= 2:
             labels1.append(label)
             scores1.append(score)
         else:
