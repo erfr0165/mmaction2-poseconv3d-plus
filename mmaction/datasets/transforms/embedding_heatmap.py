@@ -40,7 +40,7 @@ class GeneratePoseTargetWithEmbeddings(BaseTransform):
 
         dimensions (int): Dimension of the word embeddings.
         embedding_path (str): Path to word embeddings that should be used.
-        heatmaps (str): Options: ['sum', 'div', 'div_percent]. Determines the calculation for the heatmaps with word
+        heatmaps (str): Options: ['sum', 'normalized_sum', 'weighted_normalization']. Determines the calculation for the heatmaps with word
             embeddings. Default: 'sum'.
         gaussian (str): Options: ['normal', 'one']. 'Normal' means causal gaussian calculation and 'one'
             means that the whole patch will be filled with ones instead of the gaussian values. Default: 'normal'.
@@ -124,9 +124,9 @@ class GeneratePoseTargetWithEmbeddings(BaseTransform):
         img_h = arr.shape[1]
         img_w = arr.shape[2]
     
-        if self.heatmaps in {'div', 'div_percent'}:
+        if self.heatmaps in {'normalized_sum', 'weighted_normalization'}:
             # for later heatmap computation
-            arr_div_or_percent = arr.copy()
+            arr_norm = arr.copy()
 
         # when processing 2 skeletons load embeddings for correct skeleton
         # here: determined by 'frame_dir' of the sample
@@ -175,18 +175,18 @@ class GeneratePoseTargetWithEmbeddings(BaseTransform):
                 # add word embeddings to heatmap
                 np.add(arr[:, st_y:ed_y, st_x:ed_x], patch_stack * embs, out=arr[:, st_y:ed_y, st_x:ed_x])
 
-                if self.heatmaps == 'div':
-                    arr_div_or_percent[:, st_y:ed_y, st_x:ed_x] += 1
-                if self.heatmaps == 'div_percent':
-                    arr_div_or_percent[:, st_y:ed_y, st_x:ed_x] += patch_stack
+                if self.heatmaps == 'normalized_sum':
+                    arr_norm[:, st_y:ed_y, st_x:ed_x] += 1
+                if self.heatmaps == 'weighted_normalization':
+                    arr_norm[:, st_y:ed_y, st_x:ed_x] += patch_stack
 
-        if self.heatmaps in {'div', 'div_percent'}:
-            arr_div_or_percent = np.where(arr_div_or_percent==0, 1, arr_div_or_percent)
+        if self.heatmaps in {'normalized_sum', 'weighted_normalization'}:
+            arr_norm = np.where(arr_norm==0, 1, arr_norm)
 
-            if self.heatmaps == 'div':
-                arr /= arr_div_or_percent
-            if self.heatmaps == 'div_percent':
-                arr = arr * (1 / arr_div_or_percent)
+            if self.heatmaps == 'normalized_sum':
+                arr /= arr_norm
+            if self.heatmaps == 'weighted_normalization':
+                arr = arr * (1 / arr_norm)
 
     def generate_heatmap(self, arr: np.ndarray, kps: np.ndarray,
                          max_values: np.ndarray, frame_dir: str) -> None:
