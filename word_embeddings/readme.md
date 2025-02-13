@@ -65,3 +65,14 @@ When using different datasets these files may also need to be adapted.
 | **`write_embeddings_to_pkl.py`** | Collects embeddings from relevant words for action recognition.                                          |
 | **`visualization.py`**           | Performs visualization of word embeddings based on cosine similarity.                                    |
 | **`loss_computation.py`**        | Calculates the loss for the reduced word embeddings based on cosine similarity.                          |
+
+
+## Steps to create Word Embeddings for training PoseConv3D
+1. Download word embeddings via download_embeddings.bash
+2. Execute create_vocabulary.py to generate a small vocabulary with relevant words.
+3. Perform dimension reduction
+   1. PCA or
+   2. Encoder
+4. Write the reduced word embeddings to a .pkl file and specify the path in the [config](/configs/skeleton/posec3dplus/ikea_without_objects.py)
+
+(Some parameters of the files need to be adapted depending on the use-case. Please refer to the documentation within the respective files.)
