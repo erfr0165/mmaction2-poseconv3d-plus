@@ -40,6 +40,7 @@ class GeneratePoseTargetWithEmbeddings(BaseTransform):
 
         dimensions (int): Dimension of the word embeddings.
         embedding_path (str): Path to word embeddings that should be used.
+        embedding_path2 (str): Path to word embeddings for second dataset.
         heatmaps (str): Options: ['sum', 'normalized_sum', 'weighted_normalization']. Determines the calculation for the heatmaps with word
             embeddings. Default: 'sum'.
         gaussian (str): Options: ['normal', 'one']. 'Normal' means causal gaussian calculation and 'one'

@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+# code to seperately evaluate two datasets when training with them at the same time
 import copy
 from collections import OrderedDict
 from itertools import product
